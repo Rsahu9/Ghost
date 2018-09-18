@@ -38,9 +38,7 @@ authorize = {
         };
     },
 
-    authorizeAdminAPI: [function (req, res, next) {
-        next();
-    }, session.ensureUser],
+    authorizeAdminAPI: [session.ensureUser],
 
     authorizeContentAPI: (req, res, next) => {
         next();
