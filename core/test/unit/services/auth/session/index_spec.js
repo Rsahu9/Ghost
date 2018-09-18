@@ -76,7 +76,7 @@ describe('Session Service', function () {
 
         it('calls next with an UnauthorizedError if the check fails', function (done) {
             const req = fakeReq();
-            const checkStub = sandbox.stub(models.User, 'check')
+            sandbox.stub(models.User, 'check')
                 .rejects();
             sandbox.stub(req, 'get')
                 .withArgs('origin').returns('http://host.tld');
@@ -90,12 +90,12 @@ describe('Session Service', function () {
         it('sets req.session.user_id and calls sendStatus with 201 if the check succeeds', function (done) {
             const req = fakeReq();
             const res = fakeRes();
-            const checkStub = sandbox.stub(models.User, 'check')
+            sandbox.stub(models.User, 'check')
                 .resolves(models.User.forge({id: 23}));
             sandbox.stub(req, 'get')
                 .withArgs('origin').returns('http://host.tld');
 
-            const sendStatusStub = sandbox.stub(res, 'sendStatus')
+            sandbox.stub(res, 'sendStatus')
                 .callsFake(function (statusCode) {
                     should.equal(req.session.user_id, 23);
                     should.equal(statusCode, 201);
@@ -120,7 +120,7 @@ describe('Session Service', function () {
         it('calls next with InternalServerError if destroy errors', function (done) {
             const req = fakeReq();
             const res = fakeRes();
-            const destroyStub = sandbox.stub(req.session, 'destroy')
+            sandbox.stub(req.session, 'destroy')
                 .callsFake(function (fn) {
                     fn(new Error('oops'));
                 });
@@ -134,11 +134,11 @@ describe('Session Service', function () {
         it('calls sendStatus with 204 if destroy does not error', function (done) {
             const req = fakeReq();
             const res = fakeRes();
-            const destroyStub = sandbox.stub(req.session, 'destroy')
+            sandbox.stub(req.session, 'destroy')
                 .callsFake(function (fn) {
                     fn();
                 });
-            const sendStatusStub = sandbox.stub(res, 'sendStatus')
+            sandbox.stub(res, 'sendStatus')
                 .callsFake(function (status) {
                     should.equal(status, 204);
                     done();
@@ -174,7 +174,7 @@ describe('Session Service', function () {
         it('calls User.findOne with id set to req.session.user_id', function (done) {
             const req = fakeReq();
             const res = fakeRes();
-            const findOneStub = sandbox.stub(models.User, 'findOne')
+            sandbox.stub(models.User, 'findOne')
                 .callsFake(function (opts) {
                     should.equal(opts.id, 23);
                     done();
@@ -187,7 +187,7 @@ describe('Session Service', function () {
         it('calls next with UnauthorizedError if the user is not found', function (done) {
             const req = fakeReq();
             const res = fakeRes();
-            const findOneStub = sandbox.stub(models.User, 'findOne')
+            sandbox.stub(models.User, 'findOne')
                 .rejects();
 
             req.session.user_id = 23;
@@ -201,7 +201,7 @@ describe('Session Service', function () {
             const req = fakeReq();
             const res = fakeRes();
             const user = models.User.forge({id: 23});
-            const findOneStub = sandbox.stub(models.User, 'findOne')
+            sandbox.stub(models.User, 'findOne')
                 .resolves(user);
 
             req.session.user_id = 23;
